@@ -2,25 +2,24 @@ import { Schema, model, Document, Model } from "mongoose";
 import bcrpyt from "bcryptjs";
 import { authConfig } from "@src/configs";
 import { UserType } from "@src/interfaces/enum.interface";
-import { required } from "joi";
 export interface IUser {
   __t: UserType;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   phone?: string;
-  identifierImage: string;
 }
 
 export interface IUserDocument extends IUser, Document {}
 
 const UserSchema = new Schema<IUser>(
   {
-    fullName: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     email: { unique: true, type: String, required: true },
     password: { type: String, required: true },
     phone: { type: String, default: "" },
-    identifierImage: { type: String, required: true },
     __t: {
       type: String,
       enum: Object.values(UserType),

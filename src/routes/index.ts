@@ -7,10 +7,7 @@ import {
 import { Request, Response, Router } from "express";
 import os from "os";
 import authRoutes from "./auth.routes";
-import agentRoutes from "./agent.routes";
-import artisanRoutes from "./artisan.routes";
-import landLordRoutes from "./landlord.routes";
-import careTakerRoute from "./caretaker.routes";
+
 import userRoute from "./user.routes";
 
 const router = Router();
@@ -35,10 +32,6 @@ const index = (_req: Request, res: Response): any => {
 router.get("/", index);
 
 router.use(`${apiVersion}/auth`, authRoutes);
-router.use(`${apiVersion}/agent`, agentRoutes);
-router.use(`${apiVersion}/artisan`, artisanRoutes);
-router.use(`${apiVersion}/landlord`, landLordRoutes);
-router.use(`${apiVersion}/caretaker`, careTakerRoute);
 router.use(`${apiVersion}/user`, userRoute);
 
 router.use("*", (req) => {

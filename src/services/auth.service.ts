@@ -13,14 +13,6 @@ import path from "path";
 import { DecodedAuthToken } from "@src/interfaces/function.interface";
 import { UserType } from "@src/interfaces/enum.interface";
 import UserService from "@src/services/user.service";
-import caretakerService from "@src/services/caretaker.service";
-import agentService from "@src/services/agent.service";
-import artisanService from "@src/services/artisan.service";
-import landlordService from "@src/services/landlord.service";
-import { ICareTakerAgent } from "@src/db/model/caretaker.model";
-import { IHouseAgent } from "@src/db/model/agent.model";
-import { IArtisan } from "@src/db/model/artisan.model";
-import { ILandlord } from "@src/db/model/landlord.model";
 import { mailQueue } from "@src/utils/queueManager";
 import helperUtil from "@src/utils/helperUtil";
 import {
@@ -35,7 +27,7 @@ const AuthEncryptKey = fs
   .toString();
 
 const signUp = async (
-  data: IUser | ILandlord | IHouseAgent | ICareTakerAgent | IArtisan,
+  data: IUser,
   userType: UserType
 ): Promise<IUserDocument> => {
   const isExist = await UserModel.findOne({ email: data.email });
@@ -46,18 +38,6 @@ const signUp = async (
   switch (userType) {
     case UserType.USER:
       user = await UserService.saveOrUpdate(data);
-      break;
-    case UserType.CARETAKER:
-      user = await caretakerService.saveOrUpdate(data as ICareTakerAgent);
-      break;
-    case UserType.HOUSE_AGENT:
-      user = await agentService.saveOrUpdate(data as IHouseAgent);
-      break;
-    case UserType.ARTISAN:
-      user = await artisanService.saveOrUpdate(data as IArtisan);
-      break;
-    case UserType.LANDLORD:
-      user = await landlordService.saveOrUpdate(data as ILandlord);
       break;
 
     default:
