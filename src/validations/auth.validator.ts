@@ -2,7 +2,11 @@ import { BaseValidator } from "./index";
 // import Joi, { ValidationResult } from 'joi';
 import Joi, { ValidationResult } from "joi";
 import { Request } from "express";
-import { UserType } from "@src/interfaces/enum.interface";
+import {
+  MemberStatus,
+  PostEnum,
+  UserType,
+} from "@src/interfaces/enum.interface";
 
 class AuthValidatorUtils extends BaseValidator {
   protected baseUserSchema = Joi.object({
@@ -20,7 +24,6 @@ class AuthValidatorUtils extends BaseValidator {
       "string.email": "Invalid email format",
       "any.required": "Email is required",
     }),
-
     password: Joi.string().trim().min(8).max(100).required().messages({
       "string.min": "Password must be at least 8 characters long",
       "string.max": "Password cannot exceed 100 characters",
@@ -28,10 +31,15 @@ class AuthValidatorUtils extends BaseValidator {
         "Password must include uppercase, lowercase, number, and special character",
       "any.required": "Password is required",
     }),
-
     phone: Joi.string().trim().optional().messages({
       "string.pattern.base": "Invalid phone number format",
     }),
+    post: Joi.string()
+      .valid(...Object.values(PostEnum))
+      .optional(),
+    status: Joi.string()
+      .valid(...Object.values(MemberStatus))
+      .optional(),
   });
 
   protected makeSchemaOptional(schema: Joi.ObjectSchema): Joi.ObjectSchema {
@@ -39,14 +47,6 @@ class AuthValidatorUtils extends BaseValidator {
       Object.keys(schema.describe().keys),
       (field) => field.optional()
     );
-
-    // const keys = schema.$_terms.keys;
-    // const optionalSchema = Object.keys(keys).reduce((acc, key) => {
-    //   const rule = (keys as Record<string, any>)[key];
-    //   return acc.append({
-    //     [key]: rule.optional(),
-    //   });
-    // }, Joi.object());
 
     return updateSchema;
   }

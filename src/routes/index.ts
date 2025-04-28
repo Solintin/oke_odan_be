@@ -33,6 +33,8 @@ router.get("/", index);
 
 router.use(`${apiVersion}/auth`, authRoutes);
 router.use(`${apiVersion}/user`, userRoute);
+router.use(`${apiVersion}/user`, userRoute);
+router.use(`${apiVersion}/user`, userRoute);
 
 router.use("*", (req) => {
   throw new NotFoundError(

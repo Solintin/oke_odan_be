@@ -1,7 +1,11 @@
 import { Schema, model, Document, Model } from "mongoose";
 import bcrpyt from "bcryptjs";
 import { authConfig } from "@src/configs";
-import { UserType } from "@src/interfaces/enum.interface";
+import {
+  MemberStatus,
+  PostEnum,
+  UserType,
+} from "@src/interfaces/enum.interface";
 export interface IUser {
   __t: UserType;
   firstName: string;
@@ -9,6 +13,8 @@ export interface IUser {
   email: string;
   password: string;
   phone?: string;
+  post?: PostEnum;
+  status?: MemberStatus;
 }
 
 export interface IUserDocument extends IUser, Document {}
@@ -24,6 +30,16 @@ const UserSchema = new Schema<IUser>(
       type: String,
       enum: Object.values(UserType),
       required: true,
+    },
+    post: {
+      type: String,
+      enum: Object.values(PostEnum),
+      default: PostEnum.MEMBER,
+    },
+    status: {
+      type: String,
+      enum: Object.values(MemberStatus),
+      default: MemberStatus.Pending,
     },
   },
   { timestamps: true, discriminatorKey: "__t" }

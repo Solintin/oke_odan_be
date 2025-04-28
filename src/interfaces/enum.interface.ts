@@ -8,7 +8,24 @@ export enum UserType {
   USER = "User",
   ADMIN = "Admin",
 }
+export enum PostEnum {
+  PRESIDENT = "PRESIDENT",
+  VICE_PRESIDENT = "VICE PRESIDENT",
+  FINANCIAL_SEC = "FINANCIAL SECRETARY",
+  SECRETARY = "SECRETARY",
+  MEMBER = "MEMBER",
+}
+export enum MemberStatus {
+  Pending = "Pending",
+  Active = "Active",
+  Rejected = "Rejected",
+}
 
 export enum QueueType {
   Mail = "Mail Queue",
+}
+export enum ProjectStatus {
+  Ongoing = "Ongoing",
+  Completed = "Completed",
+  Cancel = "Cancel",
 }
