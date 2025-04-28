@@ -1,7 +1,6 @@
 import { IUserDocument } from "@src/db/model/user.model";
 import { Request } from "express";
 import mongoose, { FilterQuery, Types } from "mongoose";
-import { Relationship } from "./enum.interface";
 
 export interface PaginatedResult<T> {
   data: T[];
@@ -51,13 +50,4 @@ export interface ApiError extends Error {
   message: string;
   statusCode: number;
   data: [] | {};
-}
-
-export interface INOK {
-  fullName?: string;
-  relationship?: Relationship;
-  phone?: string;
-  email?: string;
-  address: string;
-  identifierImage: string;
 }
