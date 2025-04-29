@@ -20,7 +20,7 @@ interface File {
   filename: string;
 }
 export interface ISort {
-  field?: string;
+  field?: string | number;
   order?: "asc" | "desc";
 }
 export interface PageOptions {

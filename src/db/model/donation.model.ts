@@ -1,4 +1,3 @@
-import { donationType, statusType } from "@src/interfaces/enum.interface";
 import { Id } from "@src/interfaces/function.interface";
 import { Schema, model, Document, Model, SchemaTypes } from "mongoose";
 
@@ -8,8 +7,6 @@ export interface IDonation {
   address: string;
   state: string;
   programId: Id;
-  donationType: donationType;
-  status: statusType;
   amount: number;
   item: string;
   note: string;
@@ -23,16 +20,6 @@ const DonationSchema = new Schema<IDonation>(
     lastName: { type: String, required: true },
     address: { type: String, required: true },
     state: { type: String, required: true },
-    donationType: {
-      type: String,
-      enum: Object.values(donationType),
-      default: null,
-    },
-    status: {
-      type: String,
-      enum: Object.values(statusType),
-      default: statusType.Pending,
-    },
     amount: { type: Number, default: null },
     note: { type: String, default: null },
     item: { type: String, default: null },
