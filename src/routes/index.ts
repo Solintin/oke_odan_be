@@ -7,8 +7,9 @@ import {
 import { Request, Response, Router } from "express";
 import os from "os";
 import authRoutes from "./auth.routes";
-
 import userRoute from "./user.routes";
+import announcementRoute from "./announcement.routes";
+import projectRoute from "./project.routes";
 
 const router = Router();
 const apiVersion = "/api/v1";
@@ -33,8 +34,9 @@ router.get("/", index);
 
 router.use(`${apiVersion}/auth`, authRoutes);
 router.use(`${apiVersion}/user`, userRoute);
-router.use(`${apiVersion}/user`, userRoute);
-router.use(`${apiVersion}/user`, userRoute);
+router.use(`${apiVersion}/announcement`, announcementRoute);
+router.use(`${apiVersion}/project`, projectRoute);
+// router.use(`${apiVersion}/donation`, userRoute);
 
 router.use("*", (req) => {
   throw new NotFoundError(

@@ -1,64 +1,41 @@
+import { IUser, IUserDocument } from "@src/db/model/user.model";
 import { BadRequestError } from "@src/errors";
-import { FilterQuery } from "mongoose";
-import BaseDocumentService from "./base.service";
-import DonationModel, {
-  IDonation,
-  IDonationDocument,
-} from "@src/db/model/donation.model";
-import { donationType, statusType } from "@src/interfaces/enum.interface";
-import ProgramModel from "@src/db/model/project.model";
+import { UserType } from "@src/interfaces/enum.interface";
+import { ClientSession, FilterQuery } from "mongoose";
+import UserModel from "../db/model/user.model";
+import createBaseService from "./base.service";
 
-// ✅ Fix: Use `IDonationDocument` Instead of `IDonation`
-class DonationService extends BaseDocumentService<IDonationDocument> {
-  private DonationModel = DonationModel;
-  constructor() {
-    super("Donation", DonationModel);
-  }
-
-  public async saveOrUpdate(
-    data: Partial<IDonation>, // Allow partial data for updates
-    filterQuery?: FilterQuery<IDonationDocument> // Optional filter for updates
-  ): Promise<IDonationDocument> {
-    let Donation;
-
+const donationService = createBaseService<IUserDocument>(
+  UserType.USER,
+  UserModel
+);
+const saveOrUpdate = async (
+  data: Partial<IUser>,
+  filterQuery?: FilterQuery<IUserDocument>,
+  session?: ClientSession
+): Promise<IUserDocument> => {
+  try {
+    let record;
     if (filterQuery) {
-      const isExist = await this.DonationModel.findOne({
-        ...filterQuery,
-      });
-      if (!isExist) {
-        throw new BadRequestError("Donation not found");
+      const existingRecord = await UserModel.findOne(filterQuery);
+      if (!existingRecord) {
+        throw new BadRequestError("record not found");
       }
-      if (
-        isExist.donationType === donationType.Money &&
-        data?.status === statusType.Successful
-      ) {
-        const getProgram = await ProgramModel.findById(data.programId);
-        if (getProgram) {
-          getProgram.currentRaised = getProgram.currentRaised + data.amount;
-          if (getProgram.currentRaised >= getProgram.goal) {
-            getProgram.isOnGoing = false;
-          }
-          await getProgram.save();
-        }
-      }
-      Donation = await this.DonationModel.findOneAndUpdate(filterQuery, data, {
-        new: true, // Return updated document
-        runValidators: true, // Ensure validation
+      record = await UserModel.findOneAndUpdate(filterQuery, data, {
+        new: true,
+        runValidators: true,
+        upsert: false,
       });
     } else {
-      if (data.donationType === donationType.Money && data.programId) {
-        // const getProgram = await ProgramModel.findById(data.programId);
-        // if (getProgram) {
-        //   getProgram.currentRaised = getProgram.currentRaised + data.amount;
-        //   await getProgram.save();
-        // }
-      }
-      Donation = new this.DonationModel(data);
-      await Donation.save();
+      record = new UserModel({
+        ...data,
+      });
+      await record.save({ session });
     }
-
-    return Donation;
+    return record;
+  } catch (error) {
+    throw new BadRequestError("Error saving/updating record: " + error.message);
   }
-}
+};
 
-export default new DonationService();
+export default { ...donationService, saveOrUpdate };

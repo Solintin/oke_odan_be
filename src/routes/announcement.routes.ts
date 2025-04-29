@@ -4,16 +4,17 @@ import {
   remove,
   get,
   index,
-} from "@src/controllers/user.controller";
+} from "@src/controllers/announcement.controller";
 import { Router } from "express";
 import {
   validateRequestBody,
   validateParamId,
 } from "@src/middlewares/system.middleware";
 import validateUserAccess from "@src/middlewares/auth.middleware";
-import authValidator from "@src/validations/auth.validator";
+import announcementValidator from "@src/validations/announcement.validator";
 
 const router = Router({ mergeParams: true });
+// const taskController = new TaskController();
 
 router.get(
   "/",
@@ -23,30 +24,30 @@ router.get(
 
 router.post(
   "/",
-  validateRequestBody(authValidator.createUser),
+  validateRequestBody(announcementValidator.create),
   // validateUserAccess,
   create
 );
 
 router.patch(
-  "/:donationId",
-  validateParamId("donationId"),
+  "/:announcementId",
+  validateParamId("announcementId"),
   // validateUserAccess,
-  validateRequestBody(authValidator.updateUser),
+  validateRequestBody(announcementValidator.update),
   update
 );
 
 router.delete(
-  "/:donationId",
+  "/:announcementId",
   // validateUserAccess,
-  validateParamId("donationId"),
+  validateParamId("announcementId"),
   remove
 );
 
 router.get(
-  "/:donationId",
+  "/:announcementId",
   // validateUserAccess,
-  validateParamId("donationId"),
+  validateParamId("announcementId"),
   get
 );
 

@@ -2,7 +2,7 @@ import { BaseValidator } from "./index";
 import Joi, { ValidationResult } from "joi";
 import { Request } from "express";
 
-class BlogValidatorUtils extends BaseValidator {
+class announcementValidatorUtils extends BaseValidator {
   public create = (req: Request): ValidationResult => {
     const schema = Joi.object({
       title: Joi.string().min(3).max(255).required(),
@@ -16,8 +16,7 @@ class BlogValidatorUtils extends BaseValidator {
           "date.greater": "Date must be in the future",
         }),
       images: Joi.array().items(Joi.string().uri()).min(1).required(),
-      blog_detail: Joi.string().min(10).optional(),
-      isPublished: Joi.boolean().default(false), // Defaults to false if not provided
+      announcement_detail: Joi.string().min(10).optional(),
     });
     return this.validate(schema, req.body);
   };
@@ -36,11 +35,10 @@ class BlogValidatorUtils extends BaseValidator {
         })
         .optional(),
       images: Joi.array().items(Joi.string().uri()).min(1).optional(),
-      blog_detail: Joi.string().min(10).optional(),
-      isPublished: Joi.boolean().optional(),
+      announcement_detail: Joi.string().min(10).optional(),
     });
     return this.validate(schema, req.body);
   };
 }
 
-export default new BlogValidatorUtils();
+export default new announcementValidatorUtils();
