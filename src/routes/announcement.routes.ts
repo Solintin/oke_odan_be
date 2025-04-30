@@ -4,6 +4,8 @@ import {
   remove,
   get,
   index,
+  published,
+  scheduled,
 } from "@src/controllers/announcement.controller";
 import { Router } from "express";
 import {
@@ -20,6 +22,16 @@ router.get(
   "/",
   //  validateUserAccess,
   index
+);
+router.get(
+  "/scheduled",
+  //  validateUserAccess,
+  scheduled
+);
+router.get(
+  "/published",
+  //  validateUserAccess,
+  published
 );
 
 router.post(
