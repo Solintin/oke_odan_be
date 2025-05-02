@@ -15,6 +15,8 @@ import { UserType } from "@src/interfaces/enum.interface";
 import UserService from "@src/services/user.service";
 import { mailQueue } from "@src/utils/queueManager";
 import helperUtil from "@src/utils/helperUtil";
+
+import { authConfig } from "@src/configs";
 import {
   MailTemplates,
   ResetPasswordData,
@@ -22,9 +24,7 @@ import {
 
 const authService = createBaseService<IUserDocument>("User", UserModel);
 
-const AuthEncryptKey = fs
-  .readFileSync(path.join(process.cwd(), "private.key"))
-  .toString();
+const AuthEncryptKey = authConfig.PRIVATE_AUTH_KEY;
 
 const signUp = async (
   data: IUser,
