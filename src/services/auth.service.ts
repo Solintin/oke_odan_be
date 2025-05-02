@@ -74,7 +74,7 @@ const validatePassword = (user: IUserDocument, password: string) => {
 
 const generateAccessToken = (user: IUserDocument): string => {
   return jwt.sign({ ...user }, AuthEncryptKey, {
-    algorithm: "RS256",
+    algorithm: "HS256",
     expiresIn: "1h",
   });
 };
