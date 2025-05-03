@@ -7,6 +7,7 @@ export enum status {
 export enum UserType {
   USER = "User",
   ADMIN = "Admin",
+  EXCO = "Exco",
 }
 export enum PostEnum {
   PRESIDENT = "PRESIDENT",

@@ -12,7 +12,7 @@ const create = async (req: IRequest, res: Response, next: NextFunction) => {
 
     res
       .status(201)
-      .json({ message: "user Created Successfully", data: new_user });
+      .json({ message: "announcement Created Successfully", data: new_user });
   } catch (error) {
     logger.log("error", `Error in create user controller method: ${error}`);
     next(error);
