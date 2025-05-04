@@ -15,10 +15,10 @@ export interface IAnnouncementDocument extends IAnnouncement, Document {
 
 const announcementSchema = new Schema<IAnnouncement>(
   {
-    title: { type: String, required: true },
-    author: { type: String, required: true },
-    scheduled_date: { type: Date, required: true },
-    images: { type: [String], required: true },
+    title: { type: String },
+    author: { type: String },
+    scheduled_date: { type: Date },
+    images: { type: [String] },
     announcement_detail: { type: String },
     slug: { type: String, unique: true },
   },

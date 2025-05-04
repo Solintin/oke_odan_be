@@ -21,8 +21,11 @@ const create = async (req: IRequest, res: Response, next: NextFunction) => {
 
 const update = async (req: IRequest, res: Response, next: NextFunction) => {
   try {
-    const { body: data } = req;
-    const project = await projectService.saveOrUpdate(data);
+    const {
+      body: data,
+      paramIds: { projectId },
+    } = req;
+    const project = await projectService.saveOrUpdate(data, { _id: projectId });
     res
       .status(200)
       .json({ message: "project updated Successfully", data: project });

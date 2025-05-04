@@ -33,7 +33,7 @@ router.patch(
   "/:projectId",
   validateParamId("projectId"),
   // validateUserAccess,
-  // validateRequestBody(authValidator.update),
+  validateRequestBody(projectValidator.update),
   update
 );
 
