@@ -10,6 +10,8 @@ import authRoutes from "./auth.routes";
 import userRoute from "./user.routes";
 import announcementRoute from "./announcement.routes";
 import projectRoute from "./project.routes";
+import contactRoute from "./contact.route";
+import overviewData from "@src/controllers/overview.controller";
 
 const router = Router();
 const apiVersion = "/api/v1";
@@ -36,7 +38,8 @@ router.use(`${apiVersion}/auth`, authRoutes);
 router.use(`${apiVersion}/user`, userRoute);
 router.use(`${apiVersion}/announcement`, announcementRoute);
 router.use(`${apiVersion}/project`, projectRoute);
-// router.use(`${apiVersion}/donation`, userRoute);
+router.use(`${apiVersion}/contact`, contactRoute);
+router.get(`${apiVersion}/overview`, overviewData);
 
 router.use("*", (req) => {
   throw new NotFoundError(

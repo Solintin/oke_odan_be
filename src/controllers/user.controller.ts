@@ -3,6 +3,7 @@ import logger from "@src/utils/logger";
 import { Response, NextFunction } from "express";
 import userService from "@src/services/user.service";
 import { IUser } from "@src/db/model/user.model";
+import { PostEnum } from "@src/interfaces/enum.interface";
 
 const create = async (req: IRequest, res: Response, next: NextFunction) => {
   try {
@@ -59,6 +60,22 @@ const get = async (req: IRequest, res: Response, next: NextFunction) => {
   }
 };
 
+const getExcos = async (req: IRequest, res: Response, next: NextFunction) => {
+  try {
+    const { filters, pageOpt } = req;
+    const users = await userService.getAll(
+      { ...filters, post: { $ne: PostEnum.MEMBER } },
+      null,
+      pageOpt
+    );
+    res
+      .status(200)
+      .json({ message: `users Retrieved Successfully`, data: users });
+  } catch (error) {
+    logger.log("error", `Error in retrieving user list method: ${error}`);
+    next(error);
+  }
+};
 const index = async (req: IRequest, res: Response, next: NextFunction) => {
   try {
     const { filters, pageOpt, user } = req;
@@ -72,4 +89,4 @@ const index = async (req: IRequest, res: Response, next: NextFunction) => {
   }
 };
 
-export { create, update, remove, get, index };
+export { create, update, remove, get, index, getExcos };

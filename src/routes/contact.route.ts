@@ -4,15 +4,14 @@ import {
   remove,
   get,
   index,
-  getExcos,
-} from "@src/controllers/user.controller";
+} from "@src/controllers/contact.controller";
 import { Router } from "express";
 import {
   validateRequestBody,
   validateParamId,
 } from "@src/middlewares/system.middleware";
 import validateUserAccess from "@src/middlewares/auth.middleware";
-import authValidator from "@src/validations/auth.validator";
+import contactValidator from "@src/validations/contact.validator";
 
 const router = Router({ mergeParams: true });
 // const taskController = new TaskController();
@@ -22,38 +21,33 @@ router.get(
   //  validateUserAccess,
   index
 );
-router.get(
-  "/excos",
-  //  validateUserAccess,
-  getExcos
-);
 
 router.post(
   "/",
-  validateRequestBody(authValidator.createUser),
+  validateRequestBody(contactValidator.create),
   // validateUserAccess,
   create
 );
 
 router.patch(
-  "/:userId",
-  validateParamId("userId"),
+  "/:announcementId",
+  validateParamId("announcementId"),
   // validateUserAccess,
-  validateRequestBody(authValidator.updateUser),
+  validateRequestBody(contactValidator.update),
   update
 );
 
 router.delete(
-  "/:userId",
+  "/:announcementId",
   // validateUserAccess,
-  validateParamId("userId"),
+  validateParamId("announcementId"),
   remove
 );
 
 router.get(
-  "/:userId",
+  "/:announcementId",
   // validateUserAccess,
-  validateParamId("userId"),
+  validateParamId("announcementId"),
   get
 );
 
