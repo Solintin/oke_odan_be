@@ -27,6 +27,7 @@ export interface PageOptions {
   limit?: number;
   page?: number;
   sort?: ISort;
+  search?: string
 }
 
 export interface IRequest extends Request {

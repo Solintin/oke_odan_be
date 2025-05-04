@@ -63,6 +63,7 @@ const validateParamId =
 const filterMiddleware = (req: IRequest, _: Response, next: NextFunction) => {
   const filters: FilterQuery<any> = {};
   const pageOpt: Partial<PageOptions> = {};
+
   for (const key in req.query) {
     const value = req.query[key] as string;
     if (!value) continue;
@@ -74,6 +75,7 @@ const filterMiddleware = (req: IRequest, _: Response, next: NextFunction) => {
       pageOpt.sort.order = value;
     else filters[key] = { $regex: new RegExp(value, "i") };
   }
+
   req.filters = filters;
   req.pageOpt = pageOpt;
   next();

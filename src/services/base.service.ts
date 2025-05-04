@@ -46,6 +46,17 @@ const createBaseService = <T extends DocumentWithTimeStamp>(
     const page = Math.max(1, pageOpt.page || 1);
     const skip = (page - 1) * limit;
 
+    // 🔍 Add search logic here
+    if (filterQuery?.search) {
+      const searchRegex = filterQuery.search;
+      filterQuery["$or"] = [
+        { firstName: searchRegex },
+        { lastName: searchRegex },
+        { email: searchRegex },
+      ];
+    }
+    delete filterQuery.search;
+
     const totalRecords = await resourceModel.countDocuments(filterQuery);
     const totalPages = Math.ceil(totalRecords / limit);
 
