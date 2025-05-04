@@ -1,5 +1,5 @@
 import { ProjectStatus } from "@src/interfaces/enum.interface";
-import { Schema, model, Document, Model, SchemaTypes } from "mongoose";
+import { Schema, model, Document, Model } from "mongoose";
 export interface IProject {
   title: string;
   location: string;

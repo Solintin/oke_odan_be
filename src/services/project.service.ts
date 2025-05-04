@@ -1,12 +1,12 @@
 import { BadRequestError } from "@src/errors";
 // import { LandLordSignupData } from "@src/interfaces/auth.interface";
 import { FilterQuery } from "mongoose";
-import HouseAgentModel, {
+import ProjectModel, {
   IProject,
   IProjectDocument,
 } from "@src/db/model/project.model";
 import createBaseService from "./base.service";
-import ProjectModel from "@src/db/model/project.model";
+import { ProjectStatus } from "@src/interfaces/enum.interface";
 
 const agentService = createBaseService<IProjectDocument>(
   "Project",
@@ -20,17 +20,17 @@ const saveOrUpdate = async (
   try {
     let record;
     if (filterQuery) {
-      const existingRecord = await HouseAgentModel.findOne(filterQuery);
+      const existingRecord = await ProjectModel.findOne(filterQuery);
       if (!existingRecord) {
         throw new BadRequestError("record not found");
       }
-      record = await HouseAgentModel.findOneAndUpdate(filterQuery, data, {
+      record = await ProjectModel.findOneAndUpdate(filterQuery, data, {
         new: true,
         runValidators: true,
         upsert: false,
       });
     } else {
-      record = new HouseAgentModel({
+      record = new ProjectModel({
         ...data,
       });
       await record.save();
@@ -41,4 +41,31 @@ const saveOrUpdate = async (
   }
 };
 
-export default { ...agentService, saveOrUpdate };
+const getProjectOverviewMetrics = async () => {
+  const [projectsResult, ongoingResult, completedResult, cancelResult] =
+    await Promise.all([
+      ProjectModel.aggregate([{ $count: "count" }]),
+
+      ProjectModel.aggregate([
+        { $match: { status: ProjectStatus.Ongoing } },
+        { $count: "count" },
+      ]),
+      ProjectModel.aggregate([
+        { $match: { status: ProjectStatus.Completed } },
+        { $count: "count" },
+      ]),
+      ProjectModel.aggregate([
+        { $match: { status: ProjectStatus.Cancel } },
+        { $count: "count" },
+      ]),
+    ]);
+
+  return {
+    total: projectsResult[0]?.count || 0,
+    ongoing: ongoingResult[0]?.count || 0,
+    completed: completedResult[0]?.count || 0,
+    cancel: cancelResult[0]?.count || 0,
+  };
+};
+
+export default { ...agentService, saveOrUpdate, getProjectOverviewMetrics };

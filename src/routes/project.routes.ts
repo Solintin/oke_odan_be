@@ -4,6 +4,7 @@ import {
   remove,
   get,
   index,
+  projectOverviewMetrics,
 } from "@src/controllers/project.controller";
 import { Router } from "express";
 import {
@@ -20,6 +21,11 @@ router.get(
   "/",
   //  validateUserAccess,
   index
+);
+router.get(
+  "/overview",
+  //  validateUserAccess,
+  projectOverviewMetrics
 );
 
 router.post(

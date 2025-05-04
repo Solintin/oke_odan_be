@@ -74,11 +74,29 @@ const index = async (req: IRequest, res: Response, next: NextFunction) => {
     const projects = await projectService.getAll({ ...filters }, null, pageOpt);
     res
       .status(200)
-      .json({ message: `projects Retrieved Successfully`, data: projects });
+      .json({ message: `Projects Retrieved Successfully`, data: projects });
+  } catch (error) {
+    logger.log("error", `Error in retrieving user list method: ${error}`);
+    next(error);
+  }
+};
+const projectOverviewMetrics = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const projects = await projectService.getProjectOverviewMetrics();
+    res
+      .status(200)
+      .json({
+        message: `Projects overview Retrieved Successfully`,
+        data: projects,
+      });
   } catch (error) {
     logger.log("error", `Error in retrieving user list method: ${error}`);
     next(error);
   }
 };
 
-export { create, update, remove, get, index };
+export { create, update, remove, get, index, projectOverviewMetrics };
