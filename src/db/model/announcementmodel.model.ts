@@ -34,7 +34,7 @@ announcementSchema
   .virtual("status")
   .get(function (this: IAnnouncementDocument) {
     // Convert both dates to milliseconds for comparison
-    const scheduledTime = this.scheduled_date.getTime();
+    const scheduledTime = this.scheduled_date?.getTime();
     const currentTime = Date.now();
     return scheduledTime > currentTime ? "Scheduled" : "Published";
   });
