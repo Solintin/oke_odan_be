@@ -1,6 +1,7 @@
 import { BaseValidator } from "./index";
 import Joi, { ValidationResult } from "joi";
 import { Request } from "express";
+import { eventType } from "@src/db/model/eventmodel.model";
 
 class EventValidatorUtils extends BaseValidator {
   public create = (req: Request): ValidationResult => {
@@ -9,6 +10,11 @@ class EventValidatorUtils extends BaseValidator {
       address: Joi.string().min(5).max(500).required(),
       state: Joi.string().min(2).max(100).required(),
       city: Joi.string().min(2).max(100).required(),
+      link: Joi.string().optional(),
+      type: Joi.string()
+        .valid(...Object.values(eventType))
+        .optional(),
+      event: Joi.string().min(2).max(100).required(),
       country: Joi.string().min(2).max(100).required(),
       event_date: Joi.date()
         .iso() // Ensures ISO 8601 format (e.g., "2025-06-15T09:00:00Z")
@@ -34,6 +40,10 @@ class EventValidatorUtils extends BaseValidator {
       state: Joi.string().min(2).max(100).optional(),
       city: Joi.string().min(2).max(100).optional(),
       country: Joi.string().min(2).max(100).optional(),
+      link: Joi.string().optional(),
+      type: Joi.string()
+        .valid(...Object.values(eventType))
+        .optional(),
       event_date: Joi.date()
         .iso() // Ensures ISO 8601 format (e.g., "2025-06-15T09:00:00Z")
         .greater("now")
