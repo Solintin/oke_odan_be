@@ -10,12 +10,11 @@ class EventValidatorUtils extends BaseValidator {
       address: Joi.string().min(5).max(500).required(),
       state: Joi.string().min(2).max(100).required(),
       city: Joi.string().min(2).max(100).required(),
+      country: Joi.string().min(2).max(100).optional(),
       link: Joi.string().optional(),
       type: Joi.string()
         .valid(...Object.values(eventType))
         .optional(),
-      event: Joi.string().min(2).max(100).required(),
-      country: Joi.string().min(2).max(100).required(),
       event_date: Joi.date()
         .iso() // Ensures ISO 8601 format (e.g., "2025-06-15T09:00:00Z")
         .greater("now")
