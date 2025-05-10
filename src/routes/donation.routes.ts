@@ -4,14 +4,15 @@ import {
   remove,
   get,
   index,
-} from "@src/controllers/user.controller";
+  getMyDonation,
+} from "@src/controllers/donation.controller";
 import { Router } from "express";
 import {
   validateRequestBody,
   validateParamId,
 } from "@src/middlewares/system.middleware";
 import validateUserAccess from "@src/middlewares/auth.middleware";
-import authValidator from "@src/validations/auth.validator";
+import donationValidator from "@src/validations/donation.validator";
 
 const router = Router({ mergeParams: true });
 
@@ -20,10 +21,11 @@ router.get(
   //  validateUserAccess,
   index
 );
+router.get("/mydonation", validateUserAccess, getMyDonation);
 
 router.post(
   "/",
-  validateRequestBody(authValidator.createUser),
+  validateRequestBody(donationValidator.create),
   // validateUserAccess,
   create
 );
@@ -32,7 +34,7 @@ router.patch(
   "/:donationId",
   validateParamId("donationId"),
   // validateUserAccess,
-  validateRequestBody(authValidator.updateUser),
+  validateRequestBody(donationValidator.update),
   update
 );
 

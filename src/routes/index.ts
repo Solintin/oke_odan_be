@@ -12,6 +12,7 @@ import announcementRoute from "./announcement.routes";
 import projectRoute from "./project.routes";
 import contactRoute from "./contact.route";
 import eventRoute from "./event.routes";
+import donationRoute from "./donation.routes";
 import overviewData from "@src/controllers/overview.controller";
 
 const router = Router();
@@ -41,6 +42,7 @@ router.use(`${apiVersion}/announcement`, announcementRoute);
 router.use(`${apiVersion}/project`, projectRoute);
 router.use(`${apiVersion}/contact`, contactRoute);
 router.use(`${apiVersion}/event`, eventRoute);
+router.use(`${apiVersion}/donation`, donationRoute);
 router.get(`${apiVersion}/overview`, overviewData);
 
 router.use("*", (req) => {

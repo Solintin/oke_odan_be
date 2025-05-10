@@ -2,13 +2,8 @@ import { Id } from "@src/interfaces/function.interface";
 import { Schema, model, Document, Model, SchemaTypes } from "mongoose";
 
 export interface IDonation {
-  firstName: string;
-  lastName: string;
-  address: string;
-  state: string;
-  programId: Id;
+  user: Id;
   amount: number;
-  item: string;
   note: string;
 }
 
@@ -16,14 +11,9 @@ export interface IDonationDocument extends IDonation, Document {}
 
 const DonationSchema = new Schema<IDonation>(
   {
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    address: { type: String, required: true },
-    state: { type: String, required: true },
-    amount: { type: Number, default: null },
+    amount: { type: Number, default: 0.0, required: true },
     note: { type: String, default: null },
-    item: { type: String, default: null },
-    programId: { type: SchemaTypes.ObjectId, ref: "program" },
+    user: { type: SchemaTypes.ObjectId, ref: "User" },
   },
   { timestamps: true } // ✅ Ensures `createdAt` and `updatedAt`
 );

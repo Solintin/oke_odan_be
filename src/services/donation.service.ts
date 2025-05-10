@@ -1,33 +1,34 @@
-import { IUser, IUserDocument } from "@src/db/model/user.model";
+import DonationModel, {
+  IDonation,
+  IDonationDocument,
+} from "@src/db/model/donation.model";
 import { BadRequestError } from "@src/errors";
-import { UserType } from "@src/interfaces/enum.interface";
 import { ClientSession, FilterQuery } from "mongoose";
-import UserModel from "../db/model/user.model";
 import createBaseService from "./base.service";
 
-const donationService = createBaseService<IUserDocument>(
-  UserType.USER,
-  UserModel
+const donationService = createBaseService<IDonationDocument>(
+  "donation",
+  DonationModel
 );
 const saveOrUpdate = async (
-  data: Partial<IUser>,
-  filterQuery?: FilterQuery<IUserDocument>,
+  data: Partial<IDonation>,
+  filterQuery?: FilterQuery<IDonationDocument>,
   session?: ClientSession
-): Promise<IUserDocument> => {
+): Promise<IDonationDocument> => {
   try {
     let record;
     if (filterQuery) {
-      const existingRecord = await UserModel.findOne(filterQuery);
+      const existingRecord = await DonationModel.findOne(filterQuery);
       if (!existingRecord) {
         throw new BadRequestError("record not found");
       }
-      record = await UserModel.findOneAndUpdate(filterQuery, data, {
+      record = await DonationModel.findOneAndUpdate(filterQuery, data, {
         new: true,
         runValidators: true,
         upsert: false,
       });
     } else {
-      record = new UserModel({
+      record = new DonationModel({
         ...data,
       });
       await record.save({ session });
