@@ -22,11 +22,28 @@ const saveOrUpdate = async (
       if (!existingRecord) {
         throw new BadRequestError("record not found");
       }
-      record = await PaymentModel.findOneAndUpdate(filterQuery, data, {
-        new: true,
-        runValidators: true,
-        upsert: false,
-      });
+      if (data.isCurrent) {
+        await PaymentModel.updateMany(
+          { isCurrent: true },
+          { isCurrent: false },
+          { session }
+        );
+        record = await PaymentModel.findOneAndUpdate(
+          filterQuery,
+          { isCurrent: true },
+          {
+            new: true,
+            runValidators: true,
+            upsert: false,
+          }
+        );
+      } else {
+        record = await PaymentModel.findOneAndUpdate(filterQuery, data, {
+          new: true,
+          runValidators: true,
+          upsert: false,
+        });
+      }
     } else {
       record = new PaymentModel({
         ...data,

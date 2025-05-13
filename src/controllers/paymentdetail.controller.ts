@@ -75,6 +75,23 @@ const get = async (req: IRequest, res: Response, next: NextFunction) => {
     next(error);
   }
 };
+const current = async (_: IRequest, res: Response, next: NextFunction) => {
+  try {
+    const Donation = await paymentdetailService.getOrError({
+      isCurrent: true,
+    });
+    res.status(200).json({
+      message: `Current Payment Detail Fetched Successfully`,
+      data: Donation,
+    });
+  } catch (error) {
+    logger.log(
+      "error",
+      `Error in fetching Payment Detail controller method: ${error}`
+    );
+    next(error);
+  }
+};
 const index = async (req: IRequest, res: Response, Next: NextFunction) => {
   try {
     const { filters, pageOpt } = req;
@@ -93,4 +110,4 @@ const index = async (req: IRequest, res: Response, Next: NextFunction) => {
   }
 };
 
-export { create, update, remove, get, index };
+export { create, update, remove, get, index, current };

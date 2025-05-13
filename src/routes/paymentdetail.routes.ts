@@ -4,6 +4,7 @@ import {
   remove,
   get,
   index,
+  current,
 } from "@src/controllers/paymentdetail.controller";
 import { Router } from "express";
 import {
@@ -19,6 +20,12 @@ router.get(
   "/",
   //  validateUserAccess,
   index
+);
+
+router.get(
+  "/current",
+  // validateUserAccess,
+  current
 );
 
 router.post(
