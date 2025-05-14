@@ -34,6 +34,7 @@ class AuthValidatorUtils extends BaseValidator {
     phone: Joi.string().trim().optional().messages({
       "string.pattern.base": "Invalid phone number format",
     }),
+    profileImage: Joi.string().uri().optional(),
     post: Joi.string()
       .valid(...Object.values(PostEnum))
       .optional(),
