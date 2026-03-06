@@ -1,5 +1,6 @@
 import { Router } from "express";
 import eventValidator from "@src/validations/event.validator";
+import eventRegistrationValidator from "@src/validations/eventregistration.validator";
 
 import {
   create,
@@ -7,6 +8,8 @@ import {
   remove,
   get,
   index,
+  registerInterest,
+  getRegistrations,
 } from "@src/controllers/event.controller";
 import {
   validateRequestBody,
@@ -43,6 +46,19 @@ router.delete(
   // validateUserAccess,
   validateParamId("eventId"),
   remove
+);
+
+router.post(
+  "/:eventId/register-interest",
+  validateParamId("eventId"),
+  validateRequestBody(eventRegistrationValidator.create),
+  registerInterest
+);
+
+router.get(
+  "/:eventId/registrations",
+  validateParamId("eventId"),
+  getRegistrations
 );
 
 router.get(

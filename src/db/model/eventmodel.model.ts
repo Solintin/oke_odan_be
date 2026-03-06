@@ -24,6 +24,7 @@ export interface IEventDocument extends IEvent, Document {}
 const EventSchema = new Schema<IEvent>(
   {
     title: { type: String, required: true },
+    address: { type: String },
     country: { type: String },
     state: { type: String },
     city: { type: String },

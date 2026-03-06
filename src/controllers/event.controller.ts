@@ -1,5 +1,6 @@
 import { IRequest } from "@src/interfaces/function.interface";
 import eventService from "@src/services/event.service";
+import eventRegistrationService from "@src/services/eventregistration.service";
 import logger from "@src/utils/logger";
 import { Response, Request, NextFunction } from "express";
 
@@ -90,5 +91,71 @@ const index = async (req: IRequest, res: Response, Next: NextFunction) => {
     Next(error);
   }
 };
+const registerInterest = async (
+  req: IRequest,
+  res: Response,
+  Next: NextFunction
+) => {
+  try {
+    const {
+      body: data,
+      paramIds: { eventId },
+    } = req;
 
-export { create, update, remove, get, index };
+    // Ensure event exists
+    const event = await eventService.getOrError({
+      _id: eventId,
+    });
+
+    const registration = await eventRegistrationService.saveOrUpdate({
+      ...data,
+      event: event._id,
+    });
+
+    res.status(201).json({
+      message: `Interest registered successfully`,
+      data: registration,
+    });
+  } catch (error) {
+    logger.log(
+      "error",
+      `Error in registerInterest event controller method: ${error}`
+    );
+    Next(error);
+  }
+};
+
+const getRegistrations = async (
+  req: IRequest,
+  res: Response,
+  Next: NextFunction
+) => {
+  try {
+    const {
+      paramIds: { eventId },
+      filters,
+      pageOpt,
+    } = req;
+
+    await eventService.getOrError({ _id: eventId });
+
+    const registrations = await eventRegistrationService.getAll(
+      { event: eventId, ...filters },
+      null,
+      pageOpt
+    );
+
+    res.status(200).json({
+      message: `Registrations retrieved successfully`,
+      data: registrations,
+    });
+  } catch (error) {
+    logger.log(
+      "error",
+      `Error in getRegistrations event controller method: ${error}`
+    );
+    Next(error);
+  }
+};
+
+export { create, update, remove, get, index, registerInterest, getRegistrations };
