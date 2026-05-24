@@ -35,6 +35,8 @@ class AuthValidatorUtils extends BaseValidator {
       "string.pattern.base": "Invalid phone number format",
     }),
     profileImage: Joi.string().uri().optional(),
+    location: Joi.string().trim().max(500).optional().allow("", null),
+    quarters: Joi.string().trim().max(200).optional().allow("", null),
     post: Joi.string()
       .valid(...Object.values(PostEnum))
       .optional(),
@@ -51,27 +53,13 @@ class AuthValidatorUtils extends BaseValidator {
 
     return updateSchema;
   }
-  /** Member signup: rejects `location` / `quarters`. */
   public createUser = (req: Request): ValidationResult => {
-    const schema = this.baseUserSchema.append({
-      location: Joi.forbidden().messages({
-        "any.unknown": "location is not allowed",
-      }),
-      quarters: Joi.forbidden().messages({
-        "any.unknown": "quarters is not allowed",
-      }),
-    });
-
-    return this.validate(schema, req.body);
+    return this.validate(this.baseUserSchema, req.body);
   };
 
+  /** Update: optional schema from base (includes optional `location` / `quarters`). */
   public updateUser = (req: Request): ValidationResult => {
-    const optionalSchema = this.makeSchemaOptional(
-      this.baseUserSchema.append({
-        location: Joi.string().trim().max(500).optional().allow("", null),
-        quarters: Joi.string().trim().max(200).optional().allow("", null),
-      })
-    );
+    const optionalSchema = this.makeSchemaOptional(this.baseUserSchema);
     return this.validate(optionalSchema, req.body);
   };
 
