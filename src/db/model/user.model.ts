@@ -14,6 +14,8 @@ export interface IUser {
   password: string;
   phone?: string;
   profileImage?: string;
+  location?: string;
+  quarters?: string;
   post?: PostEnum;
   status?: MemberStatus;
 }
@@ -27,7 +29,9 @@ const UserSchema = new Schema<IUser>(
     email: { unique: true, type: String, required: true },
     password: { type: String, required: true },
     phone: { type: String, default: "" },
-    profileImage: { type: String, default: "" },
+    profileImage: { type: String, required: false, default: "" },
+    location: { type: String, required: false, default: "" },
+    quarters: { type: String, required: false, default: "" },
     __t: {
       type: String,
       enum: Object.values(UserType),
